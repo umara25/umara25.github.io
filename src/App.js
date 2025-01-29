@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import myPhoto from "./images/umarPhoto.jpg"; // <-- Your local image
+import myPhoto from "./images/umarPhoto.jpg"; 
 
 function App() {
   const canvasRef = useRef(null);

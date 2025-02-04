@@ -4,11 +4,9 @@ import myPhoto from "./images/umarPhoto.jpg";
 
 function App() {
   const canvasRef = useRef(null);
-  // State to control when hyperdrive ends (for fade-in timing)
   const [hyperdriveOver, setHyperdriveOver] = useState(false);
 
   useEffect(() => {
-    // ====== STAR / HYPERDRIVE EFFECT ======
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
@@ -18,43 +16,31 @@ function App() {
     let stars = [];
     let hyperdriveActive = true;
 
-    // Speed settings
     const speedDuringHyperdrive = 60;
     const speedAfterHyperdrive = 1;
-    // How long the hyperdrive lasts (ms)
     const hyperdriveDuration = 400;
 
     class Star {
       constructor() {
         this.reset();
-        // Store the previous z position for drawing lines
         this.prevZ = this.z;
       }
 
       reset() {
-        // Randomly position star around center
         this.x = Math.random() * canvas.width - canvas.width / 2;
         this.y = Math.random() * canvas.height - canvas.height / 2;
-        // Distance into screen
         this.z = Math.random() * canvas.width;
-        // Star thickness
         this.radius = Math.random() * 3 + 1;
       }
 
       update() {
         this.prevZ = this.z;
-        if (hyperdriveActive) {
-          this.z -= speedDuringHyperdrive;
-        } else {
-          this.z -= speedAfterHyperdrive;
-        }
+        this.z -= hyperdriveActive ? speedDuringHyperdrive : speedAfterHyperdrive;
 
-        // If star passes the camera
         if (this.z <= 0) {
           this.reset();
           this.z = canvas.width;
-          this.prevZ =
-            this.z + (hyperdriveActive ? speedDuringHyperdrive : speedAfterHyperdrive);
+          this.prevZ = this.z + (hyperdriveActive ? speedDuringHyperdrive : speedAfterHyperdrive);
         }
       }
 
@@ -65,7 +51,6 @@ function App() {
         const px = (this.x / this.prevZ) * canvas.width + canvas.width / 2;
         const py = (this.y / this.prevZ) * canvas.height + canvas.height / 2;
 
-        // Draw a line from previous position to current
         if (sx > 0 && sx < canvas.width && sy > 0 && sy < canvas.height) {
           ctx.beginPath();
           ctx.moveTo(px, py);
@@ -77,24 +62,20 @@ function App() {
       }
     }
 
-    // Initialize stars
     function initStars(count) {
       for (let i = 0; i < count; i++) {
         stars.push(new Star());
       }
     }
 
-    // Create plenty of stars for hyperdrive
     initStars(1500);
 
-    // End hyperdrive after hyperdriveDuration
     setTimeout(() => {
       hyperdriveActive = false;
-      setHyperdriveOver(true); // Trigger fade-ins
+      setHyperdriveOver(true);
     }, hyperdriveDuration);
 
     function animate() {
-      // Fill screen black
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -106,7 +87,6 @@ function App() {
     }
     animate();
 
-    // Handle window resize
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -120,11 +100,9 @@ function App() {
 
   return (
     <div className="App">
-      {/* ===== HERO (STAR EFFECT) ===== */}
       <header className="App-header">
         <canvas ref={canvasRef}></canvas>
 
-        {/* Fade-in navigation */}
         <nav className={`main-nav ${hyperdriveOver ? "fade-in" : ""}`}>
           <ul>
             <li><a href="#about">About</a></li>
@@ -133,23 +111,17 @@ function App() {
           </ul>
         </nav>
 
-        {/* Fade-in hero text */}
         <div className={`hero-text ${hyperdriveOver ? "fade-in" : ""}`}>
           <h1>Umar Ahmer</h1>
           <h2>Software Engineer</h2>
         </div>
       </header>
 
-      {/* ===== MAIN CONTENT ===== */}
       <main>
-        {/* ABOUT ME SECTION (image + paragraph) */}
         <section id="about" className="about-section">
           <div className="about-container">
             <div className="about-image">
-              <img
-                src={myPhoto} 
-                alt="Umar Ahmer"
-              />
+              <img src={myPhoto} alt="Umar Ahmer"/>
             </div>
             <div className="about-text">
               <h2>About Me</h2>
@@ -167,25 +139,14 @@ function App() {
           </div>
         </section>
 
-        {/* PROJECTS SECTION (three projects) */}
         <section id="projects" className="projects-section">
           <h2>Projects</h2>
 
-          {/* Velora */}
           <div className="project-card">
             <div className="project-header">
               <h3>Velora</h3>
-              {/* GitHub link icon (adjust link if needed) */}
-              <a
-                href="https://github.com/umara25/velora"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                  alt="GitHub Link"
-                  className="github-link-icon"
-                />
+              <a href="https://github.com/umara25/velora" target="_blank" rel="noopener noreferrer">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub Link" className="github-link-icon"/>
               </a>
             </div>
             <p>
@@ -197,20 +158,11 @@ function App() {
             </p>
           </div>
 
-          {/* LookLock */}
           <div className="project-card">
             <div className="project-header">
               <h3>LookLock</h3>
-              <a
-                href="https://github.com/umara25/looklock"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                  alt="GitHub Link"
-                  className="github-link-icon"
-                />
+              <a href="https://github.com/umara25/looklock" target="_blank" rel="noopener noreferrer">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub Link" className="github-link-icon"/>
               </a>
             </div>
             <p>
@@ -223,20 +175,11 @@ function App() {
             </p>
           </div>
 
-          {/* Detectorio */}
           <div className="project-card">
             <div className="project-header">
               <h3>Detectorio</h3>
-              <a
-                href="https://github.com/umara25/detectorio"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                  alt="GitHub Link"
-                  className="github-link-icon"
-                />
+              <a href="https://github.com/umara25/detectorio" target="_blank" rel="noopener noreferrer">
+                <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub Link" className="github-link-icon"/>
               </a>
             </div>
             <p>
@@ -249,45 +192,19 @@ function App() {
           </div>
         </section>
 
-        {/* CONTACT SECTION (icons) */}
         <section id="contact">
           <h2>Contact</h2>
           <p>Feel free to reach out via:</p>
 
           <div className="contact-icons">
-            {/* LinkedIn */}
-            <a
-              href="https://www.linkedin.com/in/umar-ahmer/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png"
-                alt="LinkedIn"
-                className="contact-icon"
-              />
+            <a href="https://www.linkedin.com/in/umar-ahmer/" target="_blank" rel="noopener noreferrer">
+              <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" alt="LinkedIn" className="contact-icon"/>
             </a>
-
-            {/* GitHub */}
-            <a
-              href="https://github.com/umara25"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/733/733609.png"
-                alt="GitHub"
-                className="contact-icon"
-              />
+            <a href="https://github.com/umara25" target="_blank" rel="noopener noreferrer">
+              <img src="https://cdn-icons-png.flaticon.com/512/733/733609.png" alt="GitHub" className="contact-icon"/>
             </a>
-
-            {/* Email */}
             <a href="mailto:Umarahmer1@gmail.com">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/732/732200.png"
-                alt="Email"
-                className="contact-icon"
-              />
+              <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email" className="contact-icon"/>
             </a>
           </div>
         </section>

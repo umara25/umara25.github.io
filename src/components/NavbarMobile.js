@@ -21,7 +21,7 @@ const NavbarContainer = styled.header`
   backdrop-filter: ${({ scrolled }) => scrolled ? 'blur(10px)' : 'none'};
   box-shadow: ${({ theme, scrolled }) => 
     scrolled ? theme.shadows.small : 'none'};
-  z-index: 1000;
+  z-index: 100;
   transition: all ${({ theme }) => theme.transitions.medium};
 `;
 
@@ -68,6 +68,8 @@ const MobileMenuButton = styled.button`
   display: none;
   color: ${({ theme }) => theme.colors.text};
   font-size: 1.5rem;
+  z-index: 1002; /* Higher than the mobile menu to ensure it's always clickable */
+  position: relative;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: block;
@@ -76,26 +78,27 @@ const MobileMenuButton = styled.button`
 
 const MobileMenu = styled(motion.div)`
   position: fixed;
-  top: 0; /* IMPORTANT: This is set to 0 instead of 80px to fix mobile menu overlay */
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: rgba(18, 18, 18, 0.97); /* Darker, slightly transparent background */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  z-index: 999;
-  padding-top: 80px; /* Add padding to account for the navbar height */
+  z-index: 1001;
+  padding-top: 0;
+  backdrop-filter: blur(5px);
 `;
 
 const MobileNavLink = styled(Link)`
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: ${({ theme, active }) => 
     active ? theme.colors.accent : theme.colors.text};
-  font-weight: ${({ active }) => active ? '600' : '500'};
-  margin-bottom: 1rem;
+  font-weight: ${({ active }) => active ? '700' : '600'};
+  margin-bottom: 2rem;
 `;
 
 const menuVariants = {
@@ -103,7 +106,7 @@ const menuVariants = {
     opacity: 0,
     y: "-100%",
     transition: {
-      duration: 0.3,
+      duration: 0.4,
       ease: "easeInOut"
     }
   },
@@ -111,7 +114,7 @@ const menuVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.3,
+      duration: 0.4,
       ease: "easeInOut"
     }
   }
@@ -158,7 +161,7 @@ const NavbarMobile = () => {
   
   return (
     <NavbarContainer scrolled={scrolled}>
-      <Logo to="/">Umar Ahmer</Logo>
+      <Logo to="/" style={{ opacity: mobileMenuOpen ? 0 : 1, transition: 'opacity 0.3s' }}>Umar Ahmer</Logo>
       
       <NavLinks>
         <NavLink to="/" active={location.pathname === '/' ? 1 : 0}>Home</NavLink>
@@ -168,7 +171,7 @@ const NavbarMobile = () => {
       </NavLinks>
       
       <MobileMenuButton onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-        {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+        {mobileMenuOpen ? <FaTimes style={{ color: 'white' }} /> : <FaBars />}
       </MobileMenuButton>
       
       <AnimatePresence>

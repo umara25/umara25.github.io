@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,7 +21,7 @@ const NavbarContainer = styled.header`
   backdrop-filter: ${({ scrolled }) => scrolled ? 'blur(10px)' : 'none'};
   box-shadow: ${({ theme, scrolled }) => 
     scrolled ? theme.shadows.small : 'none'};
-  z-index: 100;
+  z-index: 1002;
   transition: all ${({ theme }) => theme.transitions.medium};
 `;
 
@@ -68,8 +68,11 @@ const MobileMenuButton = styled.button`
   display: none;
   color: ${({ theme }) => theme.colors.text};
   font-size: 1.5rem;
-  z-index: 1002; /* Higher than the mobile menu to ensure it's always clickable */
-  position: relative;
+  z-index: 1004; /* Higher than the mobile menu to ensure it's always clickable */
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: block;
@@ -82,15 +85,18 @@ const MobileMenu = styled(motion.div)`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(18, 18, 18, 0.97); /* Darker, slightly transparent background */
+  width: 100vw;
+  height: 100vh;
+  background-color: #2D2D2D;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  z-index: 1001;
-  padding-top: 0;
-  backdrop-filter: blur(5px);
+  z-index: 1003;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
 `;
 
 const MobileNavLink = styled(Link)`
@@ -99,6 +105,7 @@ const MobileNavLink = styled(Link)`
     active ? theme.colors.accent : theme.colors.text};
   font-weight: ${({ active }) => active ? '700' : '600'};
   margin-bottom: 2rem;
+  text-decoration: none;
 `;
 
 const menuVariants = {
@@ -120,11 +127,11 @@ const menuVariants = {
   }
 };
 
-// This is the fixed Navbar component
 const NavbarMobile = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const scrollPositionRef = useRef(0);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -146,16 +153,22 @@ const NavbarMobile = () => {
     setMobileMenuOpen(false);
   }, [location]);
   
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
+      scrollPositionRef.current = window.pageYOffset;
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('mobile-menu-open');
     } else {
       document.body.style.overflow = 'unset';
+      document.body.classList.remove('mobile-menu-open');
+      setTimeout(() => {
+        window.scrollTo(0, scrollPositionRef.current);
+      }, 10);
     }
     
     return () => {
       document.body.style.overflow = 'unset';
+      document.body.classList.remove('mobile-menu-open');
     };
   }, [mobileMenuOpen]);
   
@@ -181,6 +194,7 @@ const NavbarMobile = () => {
             animate="open"
             exit="closed"
             variants={menuVariants}
+            data-testid="mobile-menu"
           >
             <MobileNavLink to="/" active={location.pathname === '/' ? 1 : 0}>Home</MobileNavLink>
             <MobileNavLink to="/about" active={location.pathname === '/about' ? 1 : 0}>About</MobileNavLink>

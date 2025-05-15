@@ -66,6 +66,7 @@ const MobileMenuButton = styled.button`
   display: none;
   color: ${({ theme }) => theme.colors.text};
   font-size: 1.5rem;
+  z-index: 1002;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: block;
@@ -74,24 +75,26 @@ const MobileMenuButton = styled.button`
 
 const MobileMenu = styled(motion.div)`
   position: fixed;
-  top: 80px;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: #121212;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  z-index: 999;
+  z-index: 1001;
+  padding-top: 0;
 `;
 
 const MobileNavLink = styled(Link)`
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   color: ${({ theme, active }) => 
     active ? theme.colors.accent : theme.colors.text};
-  font-weight: ${({ active }) => active ? '500' : '400'};
+  font-weight: ${({ active }) => active ? '700' : '600'};
+  margin-bottom: 2rem;
 `;
 
 const menuVariants = {
@@ -99,7 +102,7 @@ const menuVariants = {
     opacity: 0,
     y: "-100%",
     transition: {
-      duration: 0.3,
+      duration: 0.4,
       ease: "easeInOut"
     }
   },
@@ -107,7 +110,7 @@ const menuVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.3,
+      duration: 0.4,
       ease: "easeInOut"
     }
   }
@@ -138,9 +141,21 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   }, [location]);
   
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenuOpen]);
+  
   return (
     <NavbarContainer scrolled={scrolled}>
-      <Logo to="/">Umar Ahmer</Logo>
+      <Logo to="/" style={{ opacity: mobileMenuOpen ? 0 : 1, transition: 'opacity 0.3s' }}>Umar Ahmer</Logo>
       
       <NavLinks>
         <NavLink to="/" active={location.pathname === '/' ? 1 : 0}>Home</NavLink>
@@ -150,7 +165,7 @@ const Navbar = () => {
       </NavLinks>
       
       <MobileMenuButton onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-        {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+        {mobileMenuOpen ? <FaTimes style={{ color: 'white' }} /> : <FaBars />}
       </MobileMenuButton>
       
       <AnimatePresence>

@@ -88,7 +88,7 @@ const itemVariants = {
 const SkillsSection = () => {
   const skills = {
     "Languages": [
-      "JavaScript", "TypeScript", "Python", "Java", "C++", "C#", "SQL", "HTML/CSS", "R", "PHP"
+      "JavaScript", "TypeScript", "Python", "Java", "C++", "C", "C#", "Haskell", "SQL", "HTML/CSS", "R", "PHP"
     ],
     "Frameworks": [
       "React", "Node.js", "Express", "Angular", "Django", "Vue.js", ".NET Core", "Spring Boot"

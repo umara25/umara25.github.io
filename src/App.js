@@ -1,7 +1,7 @@
 import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
-import Navbar from './components/Navbar';
+import NavbarMobile from './components/NavbarMobile';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import About from './pages/About';
@@ -25,7 +25,7 @@ function App() {
   return (
     <Router basename="/">
       <AppContainer>
-        <Navbar />
+        <NavbarMobile />
         <ContentWrapper>
           <AnimatePresence mode="wait">
             <Routes>

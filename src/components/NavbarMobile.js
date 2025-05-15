@@ -100,7 +100,7 @@ const MobileMenu = styled(motion.div)`
 `;
 
 const MobileNavLink = styled(Link)`
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   color: ${({ theme, active }) => 
     active ? theme.colors.accent : theme.colors.text};
   font-weight: ${({ active }) => active ? '700' : '600'};
@@ -131,8 +131,7 @@ const NavbarMobile = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const scrollPositionRef = useRef(0);
-  
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -141,31 +140,21 @@ const NavbarMobile = () => {
         setScrolled(false);
       }
     };
-    
     window.addEventListener('scroll', handleScroll);
-    
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-  
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location]);
-  
+
   useEffect(() => {
     if (mobileMenuOpen) {
-      scrollPositionRef.current = window.pageYOffset;
       document.body.style.overflow = 'hidden';
       document.body.classList.add('mobile-menu-open');
     } else {
       document.body.style.overflow = 'unset';
       document.body.classList.remove('mobile-menu-open');
-      setTimeout(() => {
-        window.scrollTo(0, scrollPositionRef.current);
-      }, 10);
+      window.scrollTo(0, 0);
     }
-    
     return () => {
       document.body.style.overflow = 'unset';
       document.body.classList.remove('mobile-menu-open');
@@ -196,10 +185,10 @@ const NavbarMobile = () => {
             variants={menuVariants}
             data-testid="mobile-menu"
           >
-            <MobileNavLink to="/" active={location.pathname === '/' ? 1 : 0}>Home</MobileNavLink>
-            <MobileNavLink to="/about" active={location.pathname === '/about' ? 1 : 0}>About</MobileNavLink>
-            <MobileNavLink to="/projects" active={location.pathname === '/projects' ? 1 : 0}>Projects</MobileNavLink>
-            <MobileNavLink to="/contact" active={location.pathname === '/contact' ? 1 : 0}>Contact</MobileNavLink>
+            <MobileNavLink to="/" active={location.pathname === '/' ? 1 : 0} onClick={() => setMobileMenuOpen(false)}>Home</MobileNavLink>
+            <MobileNavLink to="/about" active={location.pathname === '/about' ? 1 : 0} onClick={() => setMobileMenuOpen(false)}>About</MobileNavLink>
+            <MobileNavLink to="/projects" active={location.pathname === '/projects' ? 1 : 0} onClick={() => setMobileMenuOpen(false)}>Projects</MobileNavLink>
+            <MobileNavLink to="/contact" active={location.pathname === '/contact' ? 1 : 0} onClick={() => setMobileMenuOpen(false)}>Contact</MobileNavLink>
           </MobileMenu>
         )}
       </AnimatePresence>

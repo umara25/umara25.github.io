@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { ContentContainer } from '../styles/SharedStyles';
 import { FaPaperPlane } from 'react-icons/fa';
+
+const FORM_ENDPOINT = "https://formsubmit.co/umarahmer1@gmail.com";
 
 const ContactContainer = styled.section`
   padding: 3rem 0 5rem;
@@ -125,71 +127,15 @@ const SubmitButton = styled(motion.button)`
   }
 `;
 
-const MessageStatus = styled(motion.div)`
-  padding: 1rem;
-  border-radius: 6px;
-  text-align: center;
-  margin-top: 1rem;
-  background-color: ${({ theme, status }) => 
-    status === 'success' ? 'rgba(72, 187, 120, 0.1)' : 
-    status === 'error' ? 'rgba(229, 62, 62, 0.1)' : 'transparent'
-  };
-  color: ${({ theme, status }) => 
-    status === 'success' ? theme.colors.success : 
-    status === 'error' ? theme.colors.danger : 'transparent'
-  };
-  border: 1px solid ${({ theme, status }) => 
-    status === 'success' ? theme.colors.success : 
-    status === 'error' ? theme.colors.danger : 'transparent'
-  };
-`;
-
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  
-  const [status, setStatus] = useState(null);
+  const form = useRef();
   const [loading, setLoading] = useState(false);
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+  const handleSubmit = (e) => {
     setLoading(true);
-    
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      setStatus('success');
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-      
-      setTimeout(() => {
-        setStatus(null);
-      }, 5000);
-    } catch (error) {
-      setStatus('error');
-      
-      setTimeout(() => {
-        setStatus(null);
-      }, 5000);
-    } finally {
+    setTimeout(() => {
       setLoading(false);
-    }
+    }, 1000);
   };
   
   return (
@@ -201,15 +147,23 @@ const ContactForm = () => {
           transition={{ duration: 0.5 }}
         >
           <FormHeading>Get In Touch</FormHeading>
-          <Form onSubmit={handleSubmit}>
+          <Form 
+            ref={form} 
+            onSubmit={handleSubmit} 
+            id="contact-form"
+            action={FORM_ENDPOINT}
+            method="POST"
+          >
+            <input type="hidden" name="_next" value="https://umara25.github.io/#/contact" />
+            <input type="hidden" name="_subject" value="New Contact Form Submission" />
+            <input type="hidden" name="_captcha" value="false" />
+            
             <FormGroup>
               <Label htmlFor="name">Name</Label>
               <Input
                 type="text"
                 id="name"
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
                 required
               />
             </FormGroup>
@@ -219,8 +173,6 @@ const ContactForm = () => {
                 type="email"
                 id="email"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
                 required
               />
             </FormGroup>
@@ -230,8 +182,6 @@ const ContactForm = () => {
                 type="text"
                 id="subject"
                 name="subject"
-                value={formData.subject}
-                onChange={handleChange}
                 required
               />
             </FormGroup>
@@ -240,8 +190,6 @@ const ContactForm = () => {
               <TextArea
                 id="message"
                 name="message"
-                value={formData.message}
-                onChange={handleChange}
                 required
               />
             </FormGroup>
@@ -257,18 +205,6 @@ const ContactForm = () => {
               )}
             </SubmitButton>
           </Form>
-          
-          {status && (
-            <MessageStatus
-              status={status}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              {status === 'success' ? 'Your message has been sent! I will get back to you soon.' : 
-               status === 'error' ? 'There was an error sending your message. Please try again.' : ''}
-            </MessageStatus>
-          )}
         </FormContainer>
       </ContentContainer>
     </ContactContainer>

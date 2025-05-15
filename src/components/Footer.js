@@ -68,7 +68,7 @@ const Footer = () => {
               <FaEnvelope />
             </SocialLink>
           </SocialLinks>
-          <Copyright>&copy; {currentYear} Umar Ahmer. All rights reserved.</Copyright>
+          <Copyright>&copy; {currentYear} Umar Ahmer</Copyright>
         </FooterContent>
       </ContentContainer>
     </FooterContainer>

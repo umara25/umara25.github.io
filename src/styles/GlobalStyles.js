@@ -63,4 +63,21 @@ export const GlobalStyles = createGlobalStyle`
     max-width: 1200px;
     margin: 0 auto;
   }
+  
+  /* Mobile menu fixes */
+  .mobile-menu-open {
+    overflow: hidden !important;
+    height: 100% !important;
+  }
+  
+  /* Ensure mobile menu takes full height */
+  [data-testid="mobile-menu"] {
+    height: 100vh !important;
+    width: 100vw !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1000 !important;
+    background-color: #2D2D2D !important;
+  }
 `; 

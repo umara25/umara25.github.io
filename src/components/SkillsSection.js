@@ -88,19 +88,25 @@ const itemVariants = {
 const SkillsSection = () => {
   const skills = {
     "Languages": [
-      "JavaScript", "TypeScript", "Python", "Java", "C++", "C", "C#", "Haskell", "SQL", "HTML/CSS", "R", "PHP"
+      "JavaScript", "TypeScript", "Python", "Java", "C++", "C", "C#", "Haskell", "SQL", "HTML/CSS", "R", "PHP", "MATLAB"
     ],
     "Frameworks": [
-      "React", "Node.js", "Express", "Angular", "Django", "Vue.js", ".NET Core", "Spring Boot"
+      "React", "Node.js", "Express", "Angular", "Django", "Vue.js", ".NET Core", "Spring Boot", "jQuery"
     ],
     "Developer Tools": [
-      "Git", "GitHub", "VS Code", "Docker", "Kubernetes", "Terraform", "Jenkins", "PyCharm", "IntelliJ"
+      "Git", "GitHub", "VS Code", "Docker", "Kubernetes", "Terraform", "Jenkins", "PyCharm", "IntelliJ", "Adobe After Effects"
+    ],
+    "Cloud & Platforms": [
+      "Digital Ocean", "Google Cloud Platform", "AWS", "Azure"
     ],
     "Databases": [
       "PostgreSQL", "MySQL", "MongoDB", "DynamoDB", "NoSQL"
     ],
-    "Libraries": [
-      "pandas", "NumPy", "Matplotlib", "TensorFlow", "scikit-learn", "OpenCV"
+    "Libraries & Analytics": [
+      "pandas", "NumPy", "Matplotlib", "TensorFlow", "scikit-learn", "OpenCV", "Business Analytics", "Data Analysis"
+    ],
+    "Office & Productivity": [
+      "Excel", "Numbers", "Google Sheets"
     ]
   };
 

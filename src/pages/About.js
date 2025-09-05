@@ -122,6 +122,49 @@ const SchoolLogo = styled.img`
   }
 `;
 
+const ExperienceItem = styled(TimelineItem)`
+  display: flex;
+  flex-direction: column;
+  
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+`;
+
+const ExperienceContent = styled.div`
+  flex: 1;
+`;
+
+const CompanyLogo = styled.img`
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+    margin-bottom: 0;
+    margin-top: 0.5rem;
+  }
+`;
+
+const CompanyName = styled.span`
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: italic;
+  color: ${({ theme }) => theme.colors.textSecondary};
+`;
+
+const CompanyDetail = styled.span`
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  opacity: 0.8;
+`;
+
+
 const About = () => {
   const education = [
     {
@@ -129,44 +172,45 @@ const About = () => {
       school: "McMaster University",
       location: "Hamilton, ON",
       period: "2024 - 2028",
-      description: "Currently pursuing a Computer Science degree with a focus on software engineering and machine learning.",
+      description: "Currently pursuing a Bachelor of Applied Science Degree in Computer Science with a minor in Mathematics",
       logo: process.env.PUBLIC_URL + "/images/mcmaster.png"
     }
   ];
   
   const experience = [
     {
-      title: "Team Member",
-      company: "Google Developer Student Clubs",
-      location: "Hamilton, ON",
-      period: "2024 - present",
+      title: "Production Engineering Intern",
+      company: "Meta",
+      companyDetail: "(via MLH Fellowship)",
+      period: "May 2025 - August 2025",
       description: [
-        "Collaborating with the GDSC team to organize conferences and workshops such as Google DevFest, hosting sessions for 100+ attendees, focusing on Google technologies and other emerging technologies.",
-        "Assisting in the planning and execution of the GDSC Hackathon, guiding 250+ participants in project development and pitching.",
-        "Engaging with external experts and industry professionals to deliver impactful sessions for students."
-      ]
+        "• Collaborated with a team to engineer and deploy a multi-component web application on a remote Linux server, achieving 99% uptime and improving response times.",
+        "• Engineered a containerized microservices architecture using Docker, separating Flask, MySQL, and NGINX components, resulting in 50% faster deployments and 35% improved resource utilization.",
+        "• Implemented CI/CD pipelines with GitHub Actions and developed comprehensive testing strategies, reducing production bugs by 25% and increasing code coverage to 75%."
+      ],
+      logo: process.env.PUBLIC_URL + "/images/meta.jpg"
+    },
+    {
+      title: "Hackathon Team Lead",
+      company: "Google Developer Student Clubs",
+      period: "September 2024 - present",
+      description: [
+        "• Collaborating with the GDSC team to organize conferences and workshops such as Google DevFest, hosting sessions for 100+ attendees, focusing on Google technologies and other emerging technologies.",
+        "• Assisting in the planning and execution of the GDSC Hackathon, guiding 250+ participants in project development and pitching.",
+        "• Engaging with external experts and industry professionals to deliver impactful sessions for students."
+      ],
+      logo: process.env.PUBLIC_URL + "/images/gdscmcmasteru_logo.jpg"
     },
     {
       title: "Programming Instructor",
       company: "Code Club Canada",
-      location: "Toronto, ON",
-      period: "2023 - 2024",
+      period: "September 2023 - May 2024",
       description: [
-        "Taught Python programming to 50+ students, focusing on basic syntax, data structures, and algorithmic thinking.",
-        "Designed and delivered interactive coding exercises, leading to 90% of students successfully completing hands-on projects.",
-        "Provided mentorship and guidance, helping students troubleshoot and debug their code in real-time."
-      ]
-    },
-    {
-      title: "Team Lead",
-      company: "3571 Mustang Robotics",
-      location: "Milton, ON",
-      period: "2022 - 2024",
-      description: [
-        "Led the Milton District High School FRC Robotics team, teaching new members core robotics and programming skills.",
-        "Designed and delivered hands-on coding exercises, enabling students to build interactive projects.",
-        "Mentored students by providing real-time guidance for troubleshooting and debugging code."
-      ]
+        "• Taught Python programming to 50+ students, focusing on basic syntax, data structures, and algorithmic thinking.",
+        "• Designed and delivered interactive coding exercises, leading to 90% of students successfully completing hands-on projects.",
+        "• Provided mentorship and guidance, helping students troubleshoot and debug their code in real-time."
+      ],
+      logo: process.env.PUBLIC_URL + "/images/code_club_logo.jpg"
     }
   ];
 
@@ -215,18 +259,24 @@ const About = () => {
           </SubHeading>
           <TimelineContainer>
             {experience.map((item, index) => (
-              <TimelineItem key={index}>
-                <TimelineDates>{item.period}</TimelineDates>
-                <TimelineTitle>{item.title}</TimelineTitle>
-                <TimelineSubtitle>{item.company}, {item.location}</TimelineSubtitle>
-                {Array.isArray(item.description) ? (
-                  item.description.map((desc, descIndex) => (
-                    <TimelineDescription key={descIndex}>{desc}</TimelineDescription>
-                  ))
-                ) : (
-                  <TimelineDescription>{item.description}</TimelineDescription>
-                )}
-              </TimelineItem>
+              <ExperienceItem key={index}>
+                <CompanyLogo src={item.logo} alt={`${item.company} logo`} />
+                <ExperienceContent>
+                  <TimelineDates>{item.period}</TimelineDates>
+                  <TimelineTitle>{item.title}</TimelineTitle>
+                  <TimelineSubtitle>
+                    <CompanyName>{item.company}</CompanyName>
+                    {item.companyDetail && <> <CompanyDetail>{item.companyDetail}</CompanyDetail></>}
+                  </TimelineSubtitle>
+                  {Array.isArray(item.description) ? (
+                    item.description.map((desc, descIndex) => (
+                      <TimelineDescription key={descIndex}>{desc}</TimelineDescription>
+                    ))
+                  ) : (
+                    <TimelineDescription>{item.description}</TimelineDescription>
+                  )}
+                </ExperienceContent>
+              </ExperienceItem>
             ))}
           </TimelineContainer>
         </AboutSection>

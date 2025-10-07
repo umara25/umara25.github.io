@@ -187,7 +187,7 @@ const About = () => {
         "• Integrated Tableau with both MySQL and MongoDB databases to connect multiple data sources into one platform, enabling real-time reporting and improving accessibility for 3 internal teams.",
         "• Implemented role-based access controls through Entra integration, designing policies that segmented permissions by client and ensured 100% compliance with data isolation requirements."
       ],
-      logo: process.env.PUBLIC_URL + "/images/ecoclaim.jpg"
+      logo: process.env.PUBLIC_URL + "/images/ecoclaim_logo.jpg"
     },
     {
       title: "Production Engineering Intern",

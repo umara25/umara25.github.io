@@ -179,9 +179,19 @@ const About = () => {
   
   const experience = [
     {
+      title: "Software Engineering Intern",
+      company: "EcoClaim",
+      period: "September 2025 - present",
+      description: [
+        "• Installed and configured Tableau Server in collaboration with the DevOps team, setting up a secure analytics infrastructure that supported internal teams, reducing setup time by 40%.",
+        "• Integrated Tableau with both MySQL and MongoDB databases to connect multiple data sources into one platform, enabling real-time reporting and improving accessibility for 3 internal teams.",
+        "• Implemented role-based access controls through Entra integration, designing policies that segmented permissions by client and ensured 100% compliance with data isolation requirements."
+      ],
+      logo: process.env.PUBLIC_URL + "/images/ecoclaim.jpg"
+    },
+    {
       title: "Production Engineering Intern",
       company: "Meta",
-      companyDetail: "(via MLH Fellowship)",
       period: "May 2025 - August 2025",
       description: [
         "• Collaborated with a team to engineer and deploy a multi-component web application on a remote Linux server, achieving 99% uptime and improving response times.",

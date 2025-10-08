@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { pageVariants } from '../styles/SharedStyles';
@@ -58,6 +58,97 @@ const InfoIcon = styled.div`
   transition: all ${({ theme }) => theme.transitions.short};
 `;
 
+const TwoColumnContainer = styled.section`
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 0 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: stretch;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+`;
+
+const CalendlyContainer = styled(motion.div)`
+  background-color: ${({ theme }) => theme.colors.foreground};
+  border-radius: 12px;
+  box-shadow: ${({ theme }) => theme.shadows.medium};
+  border: 1px solid ${({ theme }) => theme.colors.borderColor};
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    display: none;
+  }
+`;
+
+const CalendlyHeading = styled.h2`
+  font-size: 2rem;
+  font-weight: 700;
+  padding: 2rem 2rem 1rem;
+  color: ${({ theme }) => theme.colors.heading};
+  text-align: center;
+  position: relative;
+  margin: 0;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 4px;
+    background-color: ${({ theme }) => theme.colors.accent};
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+`;
+
+const CalendlyWidget = styled.div`
+  padding: 0;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  
+  /* Calendly widget styling */
+  .calendly-inline-widget {
+    min-width: 320px;
+    height: 600px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Override Calendly's default styling */
+  iframe {
+    border-radius: 8px !important;
+    border: none !important;
+  }
+`;
+
+const MobileBadgeContainer = styled.div`
+  display: none;
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    min-height: 60px;
+  }
+`;
+
 const Contact = () => {
   const contactInfo = [
     {
@@ -79,6 +170,116 @@ const Contact = () => {
       ariaLabel: 'Visit GitHub profile'
     }
   ];
+
+  useEffect(() => {
+    let isInitialized = false;
+    
+    // Initialize Calendly widgets
+    const initializeCalendly = () => {
+      if (window.Calendly && !isInitialized) {
+        isInitialized = true;
+        
+        // Initialize inline widget for desktop
+        if (window.innerWidth > 1024) {
+          const inlineWidget = document.querySelector('.calendly-inline-widget');
+          if (inlineWidget && !inlineWidget.querySelector('iframe')) {
+            // Clear any existing content first
+            inlineWidget.innerHTML = '';
+            
+            window.Calendly.initInlineWidget({
+              url: 'https://calendly.com/umarahmer1',
+              parentElement: inlineWidget,
+              prefill: {},
+              utm: {}
+            });
+          }
+        }
+        
+        // Initialize badge widget for mobile
+        if (window.innerWidth <= 1024) {
+          const badgeContainer = document.getElementById('calendly-badge-mobile');
+          if (badgeContainer && !badgeContainer.hasChildNodes()) {
+            window.Calendly.initBadgeWidget({
+              url: 'https://calendly.com/umarahmer1',
+              text: 'Schedule a coffee chat with me',
+              color: '#F48024',
+              textColor: '#ffffff',
+              branding: true,
+              parentElement: badgeContainer
+            });
+          }
+        }
+      } else if (!window.Calendly) {
+        // If Calendly script hasn't loaded yet, wait and try again
+        setTimeout(initializeCalendly, 200);
+      }
+    };
+
+    // Wait for Calendly script to load
+    const waitForCalendly = () => {
+      if (window.Calendly) {
+        initializeCalendly();
+      } else {
+        setTimeout(waitForCalendly, 100);
+      }
+    };
+
+    waitForCalendly();
+
+    // Handle window resize
+    const handleResize = () => {
+      if (window.Calendly) {
+        if (window.innerWidth > 1024) {
+          // Show inline widget, hide badge
+          const inlineWidget = document.querySelector('.calendly-inline-widget');
+          const badge = document.querySelector('.calendly-badge-widget');
+          
+          if (badge) badge.style.display = 'none';
+          if (inlineWidget) {
+            inlineWidget.style.display = 'block';
+            if (!inlineWidget.querySelector('iframe')) {
+              inlineWidget.innerHTML = '';
+              window.Calendly.initInlineWidget({
+                url: 'https://calendly.com/umarahmer1',
+                parentElement: inlineWidget,
+                prefill: {},
+                utm: {}
+              });
+            }
+          }
+        } else {
+          // Hide inline widget, show badge
+          const inlineWidget = document.querySelector('.calendly-inline-widget');
+          const badge = document.querySelector('.calendly-badge-widget');
+          
+          if (inlineWidget) inlineWidget.style.display = 'none';
+          if (badge) {
+            badge.style.display = 'block';
+          } else {
+            // Initialize badge widget if it doesn't exist
+            const badgeContainer = document.getElementById('calendly-badge-mobile');
+            if (badgeContainer) {
+              window.Calendly.initBadgeWidget({
+                url: 'https://calendly.com/umarahmer1',
+                text: 'Schedule a coffee chat with me',
+                color: '#F48024',
+                textColor: '#ffffff',
+                branding: true,
+                parentElement: badgeContainer
+              });
+            }
+          }
+        }
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      isInitialized = false;
+    };
+  }, []);
 
   return (
     <ContactPage
@@ -105,7 +306,26 @@ const Contact = () => {
           ))}
         </ContactInfoContainer>
       </ContactInfo>
-      <ContactForm />
+      
+      <TwoColumnContainer>
+        <CalendlyContainer
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <CalendlyHeading>Schedule a Meeting</CalendlyHeading>
+          <CalendlyWidget 
+            className="calendly-inline-widget" 
+            data-url="https://calendly.com/umarahmer1"
+            style={{ minWidth: '320px', height: '600px' }}
+          />
+        </CalendlyContainer>
+        
+        <div>
+          <ContactForm />
+          <MobileBadgeContainer id="calendly-badge-mobile" />
+        </div>
+      </TwoColumnContainer>
     </ContactPage>
   );
 };

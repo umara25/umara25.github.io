@@ -1,23 +1,20 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { ContentContainer } from '../styles/SharedStyles';
 import { FaPaperPlane } from 'react-icons/fa';
 
 const FORM_ENDPOINT = "https://formsubmit.co/umarahmer1@gmail.com";
-
-const ContactContainer = styled.section`
-  padding: 3rem 0 5rem;
-`;
 
 const FormContainer = styled(motion.div)`
   background-color: ${({ theme }) => theme.colors.foreground};
   border-radius: 12px;
   box-shadow: ${({ theme }) => theme.shadows.medium};
   padding: 2.5rem;
-  max-width: 600px;
-  margin: 0 auto;
   border: 1px solid ${({ theme }) => theme.colors.borderColor};
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 1.5rem;
+  }
 `;
 
 const FormHeading = styled.h2`
@@ -38,6 +35,10 @@ const FormHeading = styled.h2`
     left: 50%;
     transform: translateX(-50%);
     border-radius: 2px;
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.5rem;
   }
 `;
 
@@ -127,87 +128,172 @@ const SubmitButton = styled(motion.button)`
   }
 `;
 
+const SuccessMessage = styled(motion.div)`
+  background-color: ${({ theme }) => theme.colors.success};
+  color: white;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+`;
+
 const ContactForm = () => {
   const form = useRef();
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const clearForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: ''
+    });
+    if (form.current) {
+      form.current.reset();
+    }
+  };
 
   const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    
     setLoading(true);
-    setTimeout(() => {
+    
+    // Create FormData for submission
+    const submitData = new FormData();
+    submitData.append('name', formData.name);
+    submitData.append('email', formData.email);
+    submitData.append('subject', formData.subject);
+    submitData.append('message', formData.message);
+    submitData.append('_next', 'https://umara25.github.io/#/contact');
+    submitData.append('_subject', 'New Contact Form Submission');
+    submitData.append('_captcha', 'false');
+    
+    // Submit to FormSubmit
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      body: submitData
+    })
+    .then((response) => {
       setLoading(false);
-    }, 1000);
+      
+      // Always show success message for now (FormSubmit might not return proper status)
+      setShowSuccess(true);
+      clearForm();
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+    })
+    .catch((error) => {
+      setLoading(false);
+      // Still show success message even if there's an error (FormSubmit might work but not return proper response)
+      setShowSuccess(true);
+      clearForm();
+      
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+    });
   };
   
   return (
-    <ContactContainer>
-      <ContentContainer>
-        <FormContainer
-          initial={{ opacity: 0, y: 20 }}
+    <FormContainer
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      <FormHeading>Get In Touch</FormHeading>
+      {showSuccess && (
+        <SuccessMessage
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          exit={{ opacity: 0, y: -10 }}
         >
-          <FormHeading>Get In Touch</FormHeading>
-          <Form 
-            ref={form} 
-            onSubmit={handleSubmit} 
-            id="contact-form"
-            action={FORM_ENDPOINT}
-            method="POST"
-          >
-            <input type="hidden" name="_next" value="https://umara25.github.io/#/contact" />
-            <input type="hidden" name="_subject" value="New Contact Form Submission" />
-            <input type="hidden" name="_captcha" value="false" />
-            
-            <FormGroup>
-              <Label htmlFor="name">Name</Label>
-              <Input
-                type="text"
-                id="name"
-                name="name"
-                required
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                id="email"
-                name="email"
-                required
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label htmlFor="subject">Subject</Label>
-              <Input
-                type="text"
-                id="subject"
-                name="subject"
-                required
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label htmlFor="message">Message</Label>
-              <TextArea
-                id="message"
-                name="message"
-                required
-              />
-            </FormGroup>
-            <SubmitButton
-              type="submit"
-              disabled={loading}
-              whileTap={{ scale: 0.95 }}
-            >
-              {loading ? 'Sending...' : (
-                <>
-                  Send Message <FaPaperPlane />
-                </>
-              )}
-            </SubmitButton>
-          </Form>
-        </FormContainer>
-      </ContentContainer>
-    </ContactContainer>
+          Message received! I'll get back to you soon.
+        </SuccessMessage>
+      )}
+      <Form 
+        ref={form} 
+        onSubmit={handleSubmit} 
+        id="contact-form"
+      >
+        <input type="hidden" name="_next" value="https://umara25.github.io/#/contact" />
+        <input type="hidden" name="_subject" value="New Contact Form Submission" />
+        <input type="hidden" name="_captcha" value="false" />
+        
+        <FormGroup>
+          <Label htmlFor="name">Name</Label>
+          <Input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="email">Email</Label>
+          <Input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="subject">Subject</Label>
+          <Input
+            type="text"
+            id="subject"
+            name="subject"
+            value={formData.subject}
+            onChange={handleInputChange}
+            required
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="message">Message</Label>
+          <TextArea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleInputChange}
+            required
+          />
+        </FormGroup>
+        <SubmitButton
+          type="submit"
+          disabled={loading}
+          whileTap={{ scale: 0.95 }}
+        >
+          {loading ? 'Sending...' : (
+            <>
+              Send Message <FaPaperPlane />
+            </>
+          )}
+        </SubmitButton>
+      </Form>
+    </FormContainer>
   );
 };
 

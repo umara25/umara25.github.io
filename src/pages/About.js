@@ -192,7 +192,6 @@ const About = () => {
     {
       title: "Production Engineering Intern",
       company: "Meta",
-      companyDetail: "(via MLH Fellowship)",
       period: "May 2025 - August 2025",
       description: [
         "• Collaborated with a team to engineer and deploy a multi-component web application on a remote Linux server, achieving 99% uptime and improving response times.",

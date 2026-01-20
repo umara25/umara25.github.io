@@ -14,15 +14,7 @@ const HeroContainer = styled.div`
   overflow: hidden;
 `;
 
-const StarBackground = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
+
 
 const ContentWrapper = styled.div`
   width: 90%;
@@ -134,6 +126,8 @@ const ProfileImageContainer = styled(motion.div)`
     width: 350px;
     height: 350px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
   }
 `;
 
@@ -148,10 +142,10 @@ const ProfileImage = styled.img`
 
 const titleVariants = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
-    transition: { 
-      duration: 0.6, 
+    transition: {
+      duration: 0.6,
       ease: "easeInOut"
     }
   }
@@ -159,10 +153,10 @@ const titleVariants = {
 
 const subtitleVariants = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
-    transition: { 
-      duration: 0.6, 
+    transition: {
+      duration: 0.6,
       ease: "easeInOut",
       delay: 0.3
     }
@@ -171,11 +165,11 @@ const subtitleVariants = {
 
 const descriptionVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { 
-      duration: 0.6, 
+    transition: {
+      duration: 0.6,
       ease: "easeInOut",
       delay: 0.6
     }
@@ -184,11 +178,11 @@ const descriptionVariants = {
 
 const buttonVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { 
-      duration: 0.6, 
+    transition: {
+      duration: 0.6,
       ease: "easeInOut",
       delay: 0.9
     }
@@ -197,9 +191,9 @@ const buttonVariants = {
 
 const socialVariants = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
-    transition: { 
+    transition: {
       staggerChildren: 0.1,
       delayChildren: 1.2
     }
@@ -208,11 +202,11 @@ const socialVariants = {
 
 const iconVariants = {
   hidden: { opacity: 0, y: 10 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { 
-      duration: 0.5, 
+    transition: {
+      duration: 0.5,
       ease: "easeOut"
     }
   }
@@ -220,11 +214,11 @@ const iconVariants = {
 
 const imageVariants = {
   hidden: { opacity: 0, scale: 0.8 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     scale: 1,
-    transition: { 
-      duration: 0.8, 
+    transition: {
+      duration: 0.8,
       ease: "easeOut",
       delay: 0.3
     }
@@ -234,7 +228,6 @@ const imageVariants = {
 const Hero = ({ profileImage }) => {
   return (
     <HeroContainer>
-      <StarBackground />
       <ContentWrapper>
         <HeroContent>
           <Title
@@ -256,7 +249,7 @@ const Hero = ({ profileImage }) => {
             initial="hidden"
             animate="visible"
           >
-            Computer Science student at McMaster University with a passion for building impactful solutions. Experienced in full-stack development, cloud infrastructure, and CI/CD automation.
+            Computer Science student at McMaster University. Previous Intern @ Meta, EcoClaim. Experienced in full-stack development, DevOps, cloud infrastructure, and CI/CD automation.
           </Description>
           <ButtonsContainer
             variants={buttonVariants}
@@ -266,40 +259,6 @@ const Hero = ({ profileImage }) => {
             <Button as={Link} to="/projects">View Projects</Button>
             <Button as={Link} to="/contact" variant="outlined">Contact Me</Button>
           </ButtonsContainer>
-          <SocialLinksContainer
-            variants={socialVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <SocialLink 
-              as={motion.a}
-              variants={iconVariants}
-              href="https://github.com/umara25" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              aria-label="GitHub"
-            >
-              <FaGithub />
-            </SocialLink>
-            <SocialLink 
-              as={motion.a}
-              variants={iconVariants}
-              href="https://www.linkedin.com/in/umar-ahmer/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              aria-label="LinkedIn"
-            >
-              <FaLinkedin />
-            </SocialLink>
-            <SocialLink 
-              as={motion.a}
-              variants={iconVariants}
-              href="mailto:Umarahmer1@gmail.com" 
-              aria-label="Email"
-            >
-              <FaEnvelope />
-            </SocialLink>
-          </SocialLinksContainer>
         </HeroContent>
         <ProfileImageContainer
           variants={imageVariants}

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FaGithub } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
 const CardContainer = styled(motion.div)`
   background-color: ${({ theme }) => theme.colors.foreground};
@@ -13,6 +13,8 @@ const CardContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
 `;
 
 const CardImage = styled.div`
@@ -20,9 +22,10 @@ const CardImage = styled.div`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   background-image: ${({ image }) => image ? `url(${image})` : 'none'};
   background-size: cover;
-  background-position: center;
+  background-position: ${({ imagePosition }) => imagePosition || 'center'};
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
   position: relative;
+  z-index: 1;
   
   &::after {
     content: '';
@@ -124,8 +127,8 @@ const LinkButton = styled.a`
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: {
       duration: 0.4
@@ -141,13 +144,15 @@ const cardVariants = {
   }
 };
 
-const ProjectCard = ({ 
-  title, 
-  description, 
-  image, 
-  techStack = [], 
+const ProjectCard = ({
+  title,
+  description,
+  image,
+  imagePosition,
+  techStack = [],
   githubUrl,
-  delay = 0 
+  liveUrl,
+  delay = 0
 }) => {
   return (
     <CardContainer
@@ -157,7 +162,7 @@ const ProjectCard = ({
       whileHover="hover"
       transition={{ delay: delay * 0.1 }}
     >
-      {image && <CardImage image={image} />}
+      {image && <CardImage image={image} imagePosition={imagePosition} />}
       <CardContent>
         <ProjectTitle>{title}</ProjectTitle>
         <ProjectDescription>{description}</ProjectDescription>
@@ -167,10 +172,19 @@ const ProjectCard = ({
           ))}
         </TechStack>
         <Links>
+          {liveUrl && (
+            <LinkButton
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaExternalLinkAlt /> Check it out
+            </LinkButton>
+          )}
           {githubUrl && (
-            <LinkButton 
-              href={githubUrl} 
-              target="_blank" 
+            <LinkButton
+              href={githubUrl}
+              target="_blank"
               rel="noopener noreferrer"
             >
               <FaGithub /> GitHub

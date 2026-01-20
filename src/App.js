@@ -7,6 +7,7 @@ import Projects from './pages/Projects';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Footer from './components/Footer';
+import ParticlesBackground from './components/ParticlesBackground';
 import { AnimatePresence } from 'framer-motion';
 
 const AppContainer = styled.div`
@@ -14,17 +15,22 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.background};
+  position: relative;
+  z-index: 1;
 `;
 
 const ContentWrapper = styled.main`
   flex: 1;
   padding-top: 80px;
+  position: relative;
+  z-index: 1;
 `;
 
 function App() {
   return (
     <Router basename="/">
       <AppContainer>
+        <ParticlesBackground />
         <NavbarMobile />
         <ContentWrapper>
           <AnimatePresence mode="wait">

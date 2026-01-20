@@ -11,6 +11,8 @@ const FormContainer = styled(motion.div)`
   box-shadow: ${({ theme }) => theme.shadows.medium};
   padding: 2.5rem;
   border: 1px solid ${({ theme }) => theme.colors.borderColor};
+  position: relative;
+  z-index: 2;
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: 1.5rem;
@@ -171,9 +173,9 @@ const ContactForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission
-    
+
     setLoading(true);
-    
+
     // Create FormData for submission
     const submitData = new FormData();
     submitData.append('name', formData.name);
@@ -183,36 +185,36 @@ const ContactForm = () => {
     submitData.append('_next', 'https://umara25.github.io/#/contact');
     submitData.append('_subject', 'New Contact Form Submission');
     submitData.append('_captcha', 'false');
-    
+
     // Submit to FormSubmit
     fetch(FORM_ENDPOINT, {
       method: 'POST',
       body: submitData
     })
-    .then((response) => {
-      setLoading(false);
-      
-      // Always show success message for now (FormSubmit might not return proper status)
-      setShowSuccess(true);
-      clearForm();
-      
-      // Hide success message after 5 seconds
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 5000);
-    })
-    .catch((error) => {
-      setLoading(false);
-      // Still show success message even if there's an error (FormSubmit might work but not return proper response)
-      setShowSuccess(true);
-      clearForm();
-      
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 5000);
-    });
+      .then((response) => {
+        setLoading(false);
+
+        // Always show success message for now (FormSubmit might not return proper status)
+        setShowSuccess(true);
+        clearForm();
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 5000);
+      })
+      .catch((error) => {
+        setLoading(false);
+        // Still show success message even if there's an error (FormSubmit might work but not return proper response)
+        setShowSuccess(true);
+        clearForm();
+
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 5000);
+      });
   };
-  
+
   return (
     <FormContainer
       initial={{ opacity: 0, y: 20 }}
@@ -229,15 +231,15 @@ const ContactForm = () => {
           Message received! I'll get back to you soon.
         </SuccessMessage>
       )}
-      <Form 
-        ref={form} 
-        onSubmit={handleSubmit} 
+      <Form
+        ref={form}
+        onSubmit={handleSubmit}
         id="contact-form"
       >
         <input type="hidden" name="_next" value="https://umara25.github.io/#/contact" />
         <input type="hidden" name="_subject" value="New Contact Form Submission" />
         <input type="hidden" name="_captcha" value="false" />
-        
+
         <FormGroup>
           <Label htmlFor="name">Name</Label>
           <Input

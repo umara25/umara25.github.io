@@ -16,10 +16,10 @@ const NavbarContainer = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  background-color: ${({ theme, scrolled }) => 
+  background-color: ${({ theme, scrolled }) =>
     scrolled ? theme.colors.background : 'transparent'};
   backdrop-filter: ${({ scrolled }) => scrolled ? 'blur(10px)' : 'none'};
-  box-shadow: ${({ theme, scrolled }) => 
+  box-shadow: ${({ theme, scrolled }) =>
     scrolled ? theme.shadows.small : 'none'};
   z-index: 1002;
   transition: all ${({ theme }) => theme.transitions.medium};
@@ -30,6 +30,8 @@ const Logo = styled(Link)`
   font-size: 1.5rem;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.heading};
+  opacity: 0;
+  pointer-events: none;
 `;
 
 const NavLinks = styled.nav`
@@ -43,7 +45,7 @@ const NavLinks = styled.nav`
 
 const NavLink = styled(Link)`
   position: relative;
-  color: ${({ theme, active }) => 
+  color: ${({ theme, active }) =>
     active ? theme.colors.accent : theme.colors.text};
   font-weight: ${({ active }) => active ? '500' : '400'};
   padding: 0.5rem 0;
@@ -101,7 +103,7 @@ const MobileMenu = styled(motion.div)`
 
 const MobileNavLink = styled(Link)`
   font-size: 1.5rem;
-  color: ${({ theme, active }) => 
+  color: ${({ theme, active }) =>
     active ? theme.colors.accent : theme.colors.text};
   font-weight: ${({ active }) => active ? '700' : '600'};
   margin-bottom: 2rem;
@@ -160,22 +162,22 @@ const NavbarMobile = () => {
       document.body.classList.remove('mobile-menu-open');
     };
   }, [mobileMenuOpen]);
-  
+
   return (
     <NavbarContainer scrolled={scrolled}>
-      <Logo to="/" style={{ opacity: mobileMenuOpen ? 0 : 1, transition: 'opacity 0.3s' }}>Umar Ahmer</Logo>
-      
+      <Logo to="/">Umar Ahmer</Logo>
+
       <NavLinks>
         <NavLink to="/" active={location.pathname === '/' ? 1 : 0}>Home</NavLink>
         <NavLink to="/about" active={location.pathname === '/about' ? 1 : 0}>About</NavLink>
         <NavLink to="/projects" active={location.pathname === '/projects' ? 1 : 0}>Projects</NavLink>
         <NavLink to="/contact" active={location.pathname === '/contact' ? 1 : 0}>Contact</NavLink>
       </NavLinks>
-      
+
       <MobileMenuButton onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
         {mobileMenuOpen ? <FaTimes style={{ color: 'white' }} /> : <FaBars />}
       </MobileMenuButton>
-      
+
       <AnimatePresence>
         {mobileMenuOpen && (
           <MobileMenu

@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { pageVariants } from '../styles/SharedStyles';
 import Hero from '../components/Hero';
-import SkillsSection from '../components/SkillsSection';
+
 
 // Profile image in the public directory
-const profileImageUrl = process.env.PUBLIC_URL + '/images/selfie.jpg'; 
+const profileImageUrl = process.env.PUBLIC_URL + '/images/selfie.jpg';
 
 const HomePage = styled(motion.div)``;
 
@@ -19,7 +19,7 @@ const Home = () => {
       exit="exit"
     >
       <Hero profileImage={profileImageUrl} />
-      <SkillsSection />
+
     </HomePage>
   );
 };

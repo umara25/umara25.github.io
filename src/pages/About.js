@@ -1,20 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { pageVariants, ContentContainer, Heading, Paragraph } from '../styles/SharedStyles';
+import { pageVariants, ContentContainer } from '../styles/SharedStyles';
 import { FaGraduationCap, FaLaptopCode } from 'react-icons/fa';
 
 const AboutPage = styled(motion.div)`
   padding: 5rem 0;
+  position: relative;
+  z-index: 2;
 `;
 
 const AboutSection = styled.section`
-  margin-bottom: 4rem;
-`;
-
-const AboutHeader = styled.div`
-  margin-bottom: 3rem;
-  text-align: center;
+  margin-bottom: 1.5rem;
 `;
 
 const SubHeading = styled.h3`
@@ -84,15 +81,6 @@ const TimelineDescription = styled.p`
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: 0.75rem;
   line-height: 1.6;
-`;
-
-const AboutContent = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: ${({ theme }) => theme.colors.foreground};
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: ${({ theme }) => theme.shadows.medium};
 `;
 
 const EducationItem = styled(TimelineItem)`
@@ -176,12 +164,12 @@ const About = () => {
       logo: process.env.PUBLIC_URL + "/images/mcmaster.png"
     }
   ];
-  
+
   const experience = [
     {
-      title: "Software Engineering Intern",
+      title: "Software Engineer Intern",
       company: "EcoClaim",
-      period: "September 2025 - present",
+      period: "September 2025 - December 2025",
       description: [
         "• Installed and configured Tableau Server in collaboration with the DevOps team, setting up a secure analytics infrastructure that supported internal teams, reducing setup time by 40%.",
         "• Integrated Tableau with both MySQL and MongoDB databases to connect multiple data sources into one platform, enabling real-time reporting and improving accessibility for 3 internal teams.",
@@ -190,7 +178,7 @@ const About = () => {
       logo: process.env.PUBLIC_URL + "/images/ecoclaim_logo.jpg"
     },
     {
-      title: "Production Engineering Intern",
+      title: "Production Engineer Intern",
       company: "Meta",
       period: "May 2025 - August 2025",
       description: [
@@ -210,17 +198,6 @@ const About = () => {
         "• Engaging with external experts and industry professionals to deliver impactful sessions for students."
       ],
       logo: process.env.PUBLIC_URL + "/images/gdscmcmasteru_logo.jpg"
-    },
-    {
-      title: "Programming Instructor",
-      company: "Code Club Canada",
-      period: "September 2023 - May 2024",
-      description: [
-        "• Taught Python programming to 50+ students, focusing on basic syntax, data structures, and algorithmic thinking.",
-        "• Designed and delivered interactive coding exercises, leading to 90% of students successfully completing hands-on projects.",
-        "• Provided mentorship and guidance, helping students troubleshoot and debug their code in real-time."
-      ],
-      logo: process.env.PUBLIC_URL + "/images/code_club_logo.jpg"
     }
   ];
 
@@ -232,17 +209,7 @@ const About = () => {
       exit="exit"
     >
       <ContentContainer>
-        <AboutHeader>
-          <Heading>About Me</Heading>
-          <AboutContent>
-            <Paragraph>
-              I am a Computer Science student at McMaster University with a deep passion for building impactful solutions. My experience spans full-stack web development, cloud infrastructure, and CI/CD automation, and I enjoy exploring cutting-edge frameworks to continuously sharpen my skills.
-            </Paragraph>
-            <Paragraph>
-              Proficient in Python, JavaScript, and C++, I thrive on solving complex problems and bringing innovative ideas to life. Whether it's architecting scalable cloud solutions or optimizing deployment pipelines, I embrace every opportunity to learn and grow in the ever-evolving tech landscape.
-            </Paragraph>
-          </AboutContent>
-        </AboutHeader>
+
 
         <AboutSection>
           <SubHeading>

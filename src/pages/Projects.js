@@ -6,6 +6,8 @@ import ProjectCard from '../components/ProjectCard';
 
 const ProjectsPage = styled(motion.div)`
   padding: 5rem 0;
+  position: relative;
+  z-index: 2;
 `;
 
 const ProjectsGrid = styled.div`
@@ -22,8 +24,24 @@ const ProjectsGrid = styled.div`
 const Projects = () => {
   const projects = [
     {
+      title: 'PolyYield',
+      description: 'Winner @ NexHacks. No-lose prediction markets where your principal is always protected. Winners earn yield, losers get their deposit back.',
+      image: process.env.PUBLIC_URL + '/images/polyhome.png',
+      techStack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Three.js', 'Solana', 'Anchor', 'DeFi'],
+      liveUrl: 'https://polyyield.vercel.app/',
+      githubUrl: 'https://github.com/umara25',
+    },
+    {
+      title: 'AI Voice Agent',
+      description: 'A real-time voice AI agent powered by LiveKit and Google\'s Gemini Realtime API, enabling natural conversational interactions through browser-based voice interface.',
+      image: process.env.PUBLIC_URL + '/images/voice_agent.png',
+      imagePosition: 'center top',
+      techStack: ['LiveKit', 'Google Gemini API', 'Flask', 'JavaScript'],
+      githubUrl: 'https://github.com/umara25',
+    },
+    {
       title: 'LookLock',
-      description: 'LookLock is a focusing tool that helps the user focus on the task in front of them for longer periods of time. The application tracks the person\'s eyes and reminds them with a beep if they are out of focus for over a minute. This Increases the rate of concentration over time.',
+      description: 'Winner @ JamHacks. A focusing tool that tracks eye movement and alerts users when they lose focus, helping improve concentration over time.',
       image: process.env.PUBLIC_URL + '/images/looklock.png',
       techStack: ['Python', 'Streamlit', 'OpenCV', 'Django', 'React'],
       githubUrl: 'https://github.com/umara25/LookLock',
@@ -55,12 +73,14 @@ const Projects = () => {
         <Heading>Projects</Heading>
         <ProjectsGrid>
           {projects.map((project, index) => (
-            <ProjectCard 
+            <ProjectCard
               key={index}
               title={project.title}
               description={project.description}
               image={project.image}
+              imagePosition={project.imagePosition}
               techStack={project.techStack}
+              liveUrl={project.liveUrl}
               githubUrl={project.githubUrl}
               delay={index}
             />
